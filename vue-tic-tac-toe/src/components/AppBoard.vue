@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import AppSquare from './AppSquare.vue'
 
 export default {
@@ -38,7 +39,7 @@ export default {
     },
 
     makeMove(index) {
-      this.squares[index] = this.currentPlayer;
+      Vue.set(this.squares, index, this.currentPlayer);
       this.isXTurn = !this.isXTurn;
     }
   }
