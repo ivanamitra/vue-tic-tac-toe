@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div>
+    <!-- <div>
       <h2>Current Player: {{ currentPlayer }}</h2>
-    </div>
+    </div> -->
     <div id="app-board">
       <div v-for="(square, index) in squares" :key="index">
         <AppSquare v-bind:square="square" @squareClicked="makeMove(index)" />
@@ -20,8 +20,10 @@ export default {
   name: 'AppBoard',
   data() {
     return {
+      winner: null,
       squares: [],
-      isXTurn: true
+      isXTurn: true     
+
     }
   },
   computed: {
@@ -39,9 +41,33 @@ export default {
     },
 
     makeMove(index) {
+      if(this.winner) return;
       Vue.set(this.squares, index, this.currentPlayer);
-      this.isXTurn = !this.isXTurn;
+      this.winner = this.checkWinner();
+      if(!this.winnner) this.isXTurn = !this.isXTurn;
+      
+    },
+
+    checkWinner(){
+      const winner = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6]
+      ];
+
+      for (let i = 0; i < winner.length; i++) {
+        if (!!this.squares[winner[i][0]] && !!this.squares[winner[i][1]] && !!this.squares[winner[i][2]] &&  this.squares[winner[i][0]] === this.squares[winner[i][1]]  && this.squares[winner[i][0]] === this.squares[winner[i][2]]){
+          return this.currentPlayer;
+        } 
+      }
+      return null;
     }
+    
   }
 }
 </script>
