@@ -1,6 +1,6 @@
 <template>
-    <div id="app-square" @click="squareClicked">
-        {{ !!square ? square : '' }}
+    <div id="app-square" @click="$emit('squareClicked')">
+        {{  square }}
     </div>
 </template>
 
@@ -9,11 +9,6 @@ export default {
   name: 'AppSquare',
   props: {
     square: String
-  },
-  methods: {
-    squareClicked() {
-      if (!this.square) this.$emit('squareClicked');
-    }
   }
 }
 </script>

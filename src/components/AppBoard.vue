@@ -4,7 +4,7 @@
       <h2>Current Player: {{ currentPlayer }}</h2>
     </div> -->
     <div id="app-board">
-      <div v-for="(square, index) in squares" :key="index">
+      <div v-for="(square, index) in squares" :key="index" :class="colorWinner(index) ? 'greenWinn': ''" >
         <AppSquare v-bind:square="square" @squareClicked="makeMove(index)" />
       </div>
     </div>
@@ -20,9 +20,11 @@ export default {
   name: 'AppBoard',
   data() {
     return {
+      winningArr: [],
+      style:  false,
       winner: null,
       squares: [],
-      isXTurn: true     
+      isXTurn: true    
 
     }
   },
@@ -41,11 +43,19 @@ export default {
     },
 
     makeMove(index) {
-      if(this.winner) return;
+      if(this.winner) return ;
       Vue.set(this.squares, index, this.currentPlayer);
       this.winner = this.checkWinner();
       if(!this.winnner) this.isXTurn = !this.isXTurn;
       
+    },
+    colorWinner(index){
+        if(this.winningArr.indexOf(index) > -1){
+            return 'greenWinn' ;
+        } else{
+            return '';
+        }
+        
     },
 
     checkWinner(){
@@ -62,6 +72,7 @@ export default {
 
       for (let i = 0; i < winner.length; i++) {
         if (!!this.squares[winner[i][0]] && !!this.squares[winner[i][1]] && !!this.squares[winner[i][2]] &&  this.squares[winner[i][0]] === this.squares[winner[i][1]]  && this.squares[winner[i][0]] === this.squares[winner[i][2]]){
+          this.winningArr = [...winner[i]];
           return this.currentPlayer;
         } 
       }
@@ -73,6 +84,9 @@ export default {
 </script>
 
 <style>
+.greenWinn{
+  color: greenyellow;
+}
 #app-board {
   display: grid;
   grid-template-columns: 200px 200px 200px;
